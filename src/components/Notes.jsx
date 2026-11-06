@@ -3,10 +3,7 @@ import { useState } from 'react'
 
 function Notes() {
 
-    const [notes,  setNotes] = useState([
-    {id: 1, title: "Review map and filter", body: "Redo the TodoMVC steps without looking at the guide."},
-    {id: 2, title: "Prepare for the quiz", body: "Practice writing one handler for many inputs."}
-])
+    const [notes,  setNotes] = useState([])
 
     const[text, setText] = useState({title:"", body:""});
     
@@ -78,10 +75,13 @@ function Notes() {
           </button>
         </form>
     </aside>
- 
       <section className="px-12 py-11">
         <h2 className="mb-6 text-3xl">All notes</h2>
-
+        
+    {notes.length === 0 && (
+            <p className="text-lg text-[#949494]">No notes found</p>
+        )}
+        
         <ul className="grid grid-cols-3 items-start gap-5">
             {notes.map((note) => (
               <li key={note.id} className="relative min-h-32 bg-white px-6 py-5 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">
