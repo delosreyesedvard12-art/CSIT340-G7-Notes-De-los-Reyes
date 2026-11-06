@@ -1,18 +1,21 @@
+import { useState } from 'react'
+
 function NoteCard({ title, body }) {
+  const [showMore, setShowMore] = useState(false)
+
   return (
     <div>
-      <h3 className="pr-8 text-[22px] font-normal break-words">{title}</h3>
-      <p className="mt-3 text-[17px] break-words whitespace-pre-wrap text-[#4d4d4d]">
-        {body}
-      </p>
+      <h3 className="font-bold text-lg mb-2 pr-6">{title}</h3>
+      {showMore && <p className="text-sm text-gray-700 mb-3">{body}</p>}
       <button
         type="button"
-        className="mt-3 cursor-pointer text-[15px] font-normal text-[#b83f45] underline"
+        onClick={() => setShowMore(!showMore)}
+        className="text-[#b83f45] text-sm hover:underline cursor-pointer"
       >
-        Show more
+        {showMore ? "Show less" : "Show more"}
       </button>
     </div>
   )
 }
- 
+
 export default NoteCard
