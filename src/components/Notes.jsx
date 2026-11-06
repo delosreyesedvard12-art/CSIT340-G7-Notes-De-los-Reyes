@@ -3,13 +3,13 @@ import { useState } from 'react'
 
 function Notes() {
 
-    const [notes] = useState([
+    const [notes,  setNotes] = useState([
     {id: 1, title: "Review map and filter", body: "Redo the TodoMVC steps without looking at the guide."},
     {id: 2, title: "Prepare for the quiz", body: "Practice writing one handler for many inputs."}
 ])
 
     const[text, setText] = useState({title:"", body:""});
-
+    
     const handleChange = (e) => {
         const {name, value } = e.target;
         setText((prev)=>({
@@ -20,6 +20,17 @@ function Notes() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+            
+        const trimmedtitle = text.title.trim();
+        const trimmedbody = text.body.trim();
+
+        if (trimmedtitle === "" || trimmedbody === "") {
+            return;
+        }
+
+        const newNote = { id: crypto.randomUUID(), title: text.title, body: text.body };
+        setNotes([...notes, newNote]);
+        setText({title:"", body:""});
     }
 
     
