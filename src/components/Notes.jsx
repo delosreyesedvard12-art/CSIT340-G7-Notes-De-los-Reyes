@@ -21,7 +21,28 @@ function Notes() {
       return saved ? JSON.parse(saved) : startingNotes
     })
 
-    const [form, setForm] = useState({ title: "", body: "" })
+    const [form, setForm] = useState(() => {
+      const savedDraft = localStorage.getItem('draft')
+      if (!savedDraft) return { title: "", body: "" }
+
+      let draft
+      try {
+        draft = JSON.parse(savedDraft)
+      } catch (error) {
+        console.error('Unable to load saved draft:', error)
+        return { title: "", body: "" }
+      }
+
+      if (
+        draft &&
+        typeof draft.title === 'string' &&
+        typeof draft.body === 'string'
+      ) {
+        return { title: draft.title, body: draft.body }
+      }
+
+      return { title: "", body: "" }
+    })
     const [searchQuery, setSearchQuery] = useState("")
     const titleRef = useRef(null)
 
