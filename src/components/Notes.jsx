@@ -21,16 +21,26 @@ function Notes() {
       return saved ? JSON.parse(saved) : startingNotes
     })
 
-    const [text, setText] = useState({ title: "", body: "" })
+    const [form, setForm] = useState({ title: "", body: "" })
     const [searchQuery, setSearchQuery] = useState("")
 
     useEffect(() => {
         localStorage.setItem('notes', JSON.stringify(notes)) 
       },[notes])
 
+
+    useEffect(() => {
+        const id = setTimeout(() => {
+          localStorage.setItem('draft', JSON.stringify(form))
+          console.log('draft saved:', form.title)
+        }, 1000)
+        return () => clearTimeout(id)
+      },[form])
+
+      
     const handleChange = (e) => {
         const {name, value } = e.target;
-        setText((prev)=>({
+        setForm((prev)=>({
             ...prev,
             [name]: value,
         }));
@@ -39,8 +49,8 @@ function Notes() {
     const handleSubmit = (e) => {
         e.preventDefault();
             
-        const trimmedTitle = text.title.trim();
-        const trimmedBody = text.body.trim();
+        const trimmedTitle = form.title.trim();
+        const trimmedBody = form.body.trim();
 
         if (trimmedTitle === "" || trimmedBody === "") {
             return;
@@ -48,7 +58,7 @@ function Notes() {
 
         const newNote = { id: crypto.randomUUID(), title: trimmedTitle, body: trimmedBody };
         setNotes((prev) => [...prev, newNote]);
-        setText({ title: "", body: "" });
+        setForm({ title: "", body: "" });
     }
 
     function handleDelete(id) {
@@ -80,14 +90,14 @@ function Notes() {
           <p className="text-[13px] font-normal tracking-wide text-[#949494]">NEW NOTE</p>
           <input
             name="title"
-            value={text.title}
+            value={form.title}
             onChange={handleChange}
             placeholder="Title"
             className="h-[52px] w-full border border-[#e6e6e6] px-4 text-lg outline-none placeholder:text-black/40 placeholder:italic focus:border-[#cf7d7d]"
           />
           <textarea
             name="body"
-            value={text.body}
+            value={form.body}
             onChange={handleChange}
             placeholder="Write your note"
             className="h-[120px] w-full resize-none py-3 border border-[#e6e6e6] px-4 text-lg outline-none placeholder:text-black/40 placeholder:italic focus:border-[#cf7d7d]"
