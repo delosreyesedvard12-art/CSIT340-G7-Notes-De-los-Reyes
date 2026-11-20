@@ -1,5 +1,5 @@
-import NoteCard from './NoteCard.jsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import NoteCard from './NoteCard'
 
 function Notes() {
 
@@ -8,10 +8,14 @@ function Notes() {
     {id: 2, title: "Prepare for the quiz", body: "Practice writing one handler for many inputs."}
 ])
 
+    const [text, setText] = useState({ title: "", body: "" })
     const [searchQuery, setSearchQuery] = useState("")
 
-    const [text, setText] = useState({ title: "", body: "" })
-    
+
+    useEffect(() => {
+        localStorage.setItem('notes', JSON.stringify(notes))
+      },[notes])
+
     const handleChange = (e) => {
         const {name, value } = e.target;
         setText((prev)=>({
