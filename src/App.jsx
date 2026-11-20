@@ -1,10 +1,16 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {SettingContext} from './SettingContext'
 import Notes from './components/Notes'
 import Info from './components/Info'
 
 function App() {
-  const [largeText, setLargeText] = useState(false)
+  const [largeText, setLargeText] = useState(
+    () => localStorage.getItem('largeText') === 'true'
+  )
+
+  useEffect(() => {
+    localStorage.setItem('largeText', String(largeText))
+  }, [largeText])
 
   return (
     <SettingContext value={{ largeText, setLargeText }}>
