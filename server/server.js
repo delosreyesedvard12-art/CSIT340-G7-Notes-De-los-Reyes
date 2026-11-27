@@ -32,6 +32,17 @@ app.get('/notes', async (req, res) => {
   res.status(201).json(data)
 })
 
+app.delete('/notes/:id', async (req, res) => {
+  const { error } = await supabase
+    .from('notes')
+    .delete()
+    .eq('id', req.params.id)
+  if (error) {
+    return res.status(500).json({ error: error.message })
+  }
+  res.status(204).end()
+})
+
 app.listen(3000, (error) => {
   if (error) throw error
   console.log('Server running at http://localhost:3000')

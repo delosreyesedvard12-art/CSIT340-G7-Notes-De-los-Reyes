@@ -43,7 +43,7 @@ function Notes() {
         if (!res.ok) {
           throw new Error('The server answered ' + res.status)
         }
-        const data = await res.json()``
+        const data = await res.json()
         if (!ignore) setNotes(data)
       } catch (err) {
         if (!ignore) setError(err.message)
@@ -83,17 +83,19 @@ function Notes() {
 
         if (trimmedTitle === "" || trimmedBody === "") {
             return
+        }
+
     try {
       const res = await fetch(API_URL + '/notes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, body }),
+        body: JSON.stringify({ title: trimmedTitle, body: trimmedBody }),
       })
       if (!res.ok) {
         throw new Error('The server answered ' + res.status)
       }
       const newNote = await res.json()
-      setNotes([...notes, newNote])
+      setNotes((prev) => [...prev, newNote])
       setForm({ title: '', body: '' })
       titleRef.current.focus()
     } catch (err) {
@@ -101,8 +103,18 @@ function Notes() {
     }
     }
 
- const handleDelete = useCallback((id) => {
-        setNotes((prev) => prev.filter((note) => note.id !== id));
+ const handleDelete = useCallback(async (id) => {
+        try {
+          const res = await fetch(API_URL + '/notes/' + id, {
+            method: 'DELETE',
+          })
+          if (!res.ok) {
+            throw new Error('The server answered ' + res.status)
+          }
+          setNotes((prev) => prev.filter((note) => note.id !== id))
+        } catch (err) {
+          setError(err.message)
+        }
     }, [])
     
     const visibleNotes = useMemo(() => {
