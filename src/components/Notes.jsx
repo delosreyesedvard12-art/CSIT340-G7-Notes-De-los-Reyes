@@ -43,7 +43,7 @@ function Notes() {
         if (!res.ok) {
           throw new Error('The server answered ' + res.status)
         }
-        const data = await res.json()
+        const data = await res.json()``
         if (!ignore) setNotes(data)
       } catch (err) {
         if (!ignore) setError(err.message)
