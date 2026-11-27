@@ -86,7 +86,7 @@ function Notes() {
 
  const handleDelete = useCallback((id) => {
         setNotes((prev) => prev.filter((note) => note.id !== id));
-    }, [notes])
+    }, [])
     
     const visibleNotes = useMemo(() => {
     console.log('filtering')
