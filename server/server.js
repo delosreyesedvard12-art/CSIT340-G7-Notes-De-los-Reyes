@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { createClient } from '@supabase/supabase-js'
  
 const supabase = createClient(
@@ -7,7 +8,8 @@ const supabase = createClient(
 )
  
 const app = express()
- 
+app.use(cors({ origin: 'http://localhost:5173' }))
+
 app.get('/notes', async (req, res) => {
   const { data, error } = await supabase.from('notes').select().order('id')
   if (error) {
